@@ -32,6 +32,14 @@
     swipe: 50 // percent per second
   }
 
+  CarouselSwipe.prototype.cssvalues = function(left){
+    var val = isNaN(left) ? '' : 'translate3d(' + left + '%, 0, 0)';
+    return {
+      '-webkit-transform': val,
+              'transform': val
+    };
+  };
+
   CarouselSwipe.prototype.touchstart = function(e) {
     if (!this.options.swipe) return;
     var touch = e.originalEvent.touches ? e.originalEvent.touches[0] : e
@@ -61,6 +69,7 @@
   }
 
   CarouselSwipe.prototype.touchend = function(e) {
+    var _this = this;
     if (!this.options.swipe) return;
     if (!this.$active) return; // nothing moved
     var all = $()
@@ -81,13 +90,14 @@
       .emulateTransitionEnd(this.$active.css('transition-duration').slice(0, -1) * 1000)
     }
 
-    all.css('left', '')
+    // all.css('left', '')
+    all.css(_this.cssvalues(''));
     this.cycling && this.carousel.cycle()
     this.$active = null // reset the active element
   }
 
   CarouselSwipe.prototype.swipe = function(percent) {
-    var $active = this.$active || this.getActive()
+    var _this = this, $active = this.$active || this.getActive()
     if (percent < 0) {
         this.$prev
             .css('left', '')
@@ -97,7 +107,8 @@
         this.$next
             .carousel_transition(false)
             .addClass('next')
-            .css('left', (percent + 100) + '%')
+            // .css('left', (percent + 100) + '%')
+            .css(_this.cssvalues(percent + 100));
     } else {
         this.$next
             .css('left', '')
@@ -107,12 +118,14 @@
         this.$prev
             .carousel_transition(false)
             .addClass('prev')
-            .css('left', (percent - 100) + '%')
+            // .css('left', (percent - 100) + '%')
+            .css(_this.cssvalues(percent - 100));
     }
 
     $active
         .carousel_transition(false)
-        .css('left', percent + '%')
+        // .css('left', percent + '%')
+        .css(_this.cssvalues(percent));
   }
 
   CarouselSwipe.prototype.getActive = function() {

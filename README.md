@@ -2,6 +2,7 @@ bootstrap-carousel-swipe
 ========================
 
 Adding swipe behavior to Bootstrap's Carousel
+Adjusted for Bootstrap CSS3 carousel, uses translate3d (v3.3.2) instead of left (v3.0.3)
 
 ## Usage
 
